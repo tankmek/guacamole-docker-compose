@@ -42,7 +42,7 @@ services:
       MYSQL_HOSTNAME: db
       MYSQL_DATABASE: guacamole_db
       MYSQL_USER: guacamole_user
-      MYSQL_PASSWORD: [redacted]
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_PASSWORD_FILE: '/run/secrets/guacamole-user'
     secrets:
       - guacamole-user
