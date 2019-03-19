@@ -1,0 +1,59 @@
+## Guacamole 20190318
+# @c0demech
+
+version: "3.1"
+ 
+services:
+ 
+# Configure MariaDB with persistent storage
+  database:
+    image: mariadb:10.0
+    hostname: db
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: '/run/secrets/mysql-root'
+      MYSQL_DATABASE: 'guacamole_db'
+      MYSQL_USER: 'guacamole_user'
+      MYSQL_PASSWORD: '/run/secrets/guacamole-user'
+    container_name: db 
+    volumes:
+      - "db:/var/lib/mysql"
+    secrets:
+      - mysql-root
+      - guacamole-user
+ 
+# Configure proxy daemon
+  guacd:
+    image: guacamole/guacd:1.0.0
+    container_name: guacd
+ 
+# Configure and link Guacamole to db and proxy
+# expose port 8080 to host. No current way around clear-text
+# MySQL password in config
+  guacamole:
+    image: guacamole/guacamole:1.0.0
+    container_name: guacamole
+    ports:
+      - 8080:8080
+    links:
+      - guacd
+      - database
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: db
+      MYSQL_DATABASE: guacamole_db
+      MYSQL_USER: guacamole_user
+      MYSQL_PASSWORD: [redacted]
+      MYSQL_PASSWORD_FILE: '/run/secrets/guacamole-user'
+    secrets:
+      - guacamole-user
+ 
+secrets:
+  mysql-root:
+    file: mysql-root
+  guacamole-user:
+    file: guacamole-user
+ 
+# This volume has to be created before docker-compose up
+volumes:
+  db:
+    external: true
