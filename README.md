@@ -1,17 +1,63 @@
 # guacamole-docker-compose
-Build Apache Guacamole using docker compose. Utilizes Docker secrets and a persistent database volume.
+Build Apache Guacamole using MariaDB and Nginx with docker compose. Utilizes Docker secrets and a persistent database volume.
+
+I have an upstream WAF and Reverse Proxy that uses LE Certificates. That proxy connects to this instance and some other services I self host. This project was created so I could quickly stand up guacamole in my environment. It can work for you as well if u want to leverage self signed certificates. You are welcome to incorporate a LE version that auto updates.
+
 
 ## Prerequisites
 
 `docker ce`  
 `docker-compose >= 1.23.0`
 
+```
+  guacamole
+  ├── docker-compose.yml
+  ├── guacamole-user
+  ├── mysql-root
+  └── nginx
+      ├── nginx.conf
+      ├── sites
+      │   └── gproxy
+      └── ssl
+          ├── dhparam.pem
+          ├── nginx-priv.key
+          ├── nginx-pub.crt
+          └── nginx-ssl.conf
+```
+| File | Description |
+| --- | --- |
+| guacamole-user | Put your guacamole user password here. |
+| mysql-root | Put your MySQL root password here. |
+| nginx.conf |nginx site wide configuration. |
+| gproxy | vhost configuration file for nginx. |
+| dhparam.pem | Diffie-Hellman parameters for nginx. (needs to be generated) |
+| nginx-pub.crt | TLS public certificate for nginx. (needs to be generated) |
+| nginx-prv.key | TLS private key for nginx. (needs to be generated) |
+| nginx-ssl.conf | TLS settings for nginx |
+
+
 ## Usage
 
 ```
-git https://github.com/c0demech/guacamole-docker-compose.git
+sudo docker volume create --name=db
+git https://github.com/tankmek/guacamole-docker-compose.git
 cd docker-compose-guacamole
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx/ssl/nginx-prv.key -out nginx/ssl/nginx-pub.crt
+openssl dhparam -out nginx/ssl/dhparam.pem 4096
+sudo docker run --rm guacamole/guacamole:1.0.0 /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 sudo docker-compose -p guacamole up -d
+docker cp initdb.sql db:/tmp
+docker exec -it db bash
+mysql -u root -p
+use mysql;
+drop user guacamole_user;
+create user guacamole_user@'%' identified by '';
+GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole_db.* TO 'guacamole_user'@'%'; 
+flush privileges;
+use guacamole_db;
+source /tmp/initdb.sql
+exit
+exit
 ```
 
-You can access the application at `http://docker-host:8080/guacamole/`. Unless you have an nginx or apache reverse proxy configured. The default username and password are both `guacadmin` remember to _change_ this and create a separate user.
+You can access the application at `https://docker-host`. The default username and password are both `guacadmin` remember to _change_ this and create a separate user.
