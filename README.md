@@ -51,7 +51,7 @@ docker exec -it db bash
 mysql -u root -p
 use mysql;
 drop user guacamole_user;
-create user guacamole_user@'%' identified by '';
+create user guacamole_user@'%' identified by 'GuacUserPasswd';
 GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole_db.* TO 'guacamole_user'@'%'; 
 flush privileges;
 use guacamole_db;
