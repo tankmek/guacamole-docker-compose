@@ -1,1 +1,73 @@
+## Guacamole 20191108
+# @tankmek
+version: "3.1"
+ 
+services:
+ 
+# Configure MariaDB with persistent storage
+# Need to init the db
+  database:
+    image: mariadb:10.0
+    hostname: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: '/run/secrets/mysql-root'
+      MYSQL_DATABASE: 'guacamole_db'
+      MYSQL_USER: 'guacamole_user'
+      MYSQL_PASSWORD: '/run/secrets/guacamole-user'
+    container_name: db 
+    volumes:
+      - "db:/var/lib/mysql"
+    secrets:
+      - mysql-root
+      - guacamole-user
+ 
+# Configure proxy daemon
+  guacd:
+    image: guacamole/guacd:1.0.0
+    container_name: guacd
+    restart: always
+ 
+# Configure and link Guacamole to db and proxy
+  guacamole:
+    image: guacamole/guacamole:1.0.0
+    container_name: guacamole
+    restart: always
+    depends_on:
+      - database
+      - guacd
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: db
+      MYSQL_DATABASE: guacamole_db
+      MYSQL_USER: guacamole_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD_FILE: '/run/secrets/guacamole-user'
+    secrets:
+      - guacamole-user
 
+# Web Proxy
+  gproxy:
+    image: nginx:1.16.1
+    hostname: gproxy
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx/sites:/etc/nginx/sites-enabled/"
+      - "./nginx/ssl:/etc/nginx/ssl"
+    container_name: gproxy
+    ports:
+      - "443:443"
+    depends_on:
+      - guacamole
+
+# Credentials 
+secrets:
+  mysql-root:
+    file: mysql-root
+  guacamole-user:
+    file: guacamole-user
+ 
+# This volume has to be created before docker-compose up
+volumes:
+  db:
+    external: true
