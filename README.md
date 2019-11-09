@@ -10,22 +10,25 @@ I have an upstream WAF and Reverse Proxy that uses LE Certificates. That proxy c
 `docker-compose >= 1.23.0`
 
 ```
-  guacamole
-  ├── docker-compose.yml
-  ├── guacamole-user
-  ├── mysql-root
-  └── nginx
-      ├── nginx.conf
-      ├── sites
-      │   └── gproxy
-      └── ssl
-          ├── dhparam.pem
-          ├── nginx-priv.key
-          ├── nginx-pub.crt
-          └── nginx-ssl.conf
+guacamole
+├── docker-compose.yml
+├── .env
+├── guacamole-user
+├── mysql-root
+└── nginx
+    ├── nginx.conf
+    ├── sites
+    │   └── gproxy
+    └── ssl
+        ├── dhparam.pem
+        ├── nginx-priv.key
+        ├── nginx-pub.crt
+        └── nginx-ssl.conf
+
 ```
 | File | Description |
 | --- | --- |
+| .env | Docker compose will pickup environment vars from this file |
 | guacamole-user | Put your guacamole user password here. |
 | mysql-root | Put your MySQL root password here. |
 | nginx.conf |nginx site wide configuration. |
