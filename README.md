@@ -8,6 +8,7 @@ I have an upstream WAF and Reverse Proxy that uses LE Certificates. That proxy c
 
 `docker ce`  
 `docker-compose >= 1.23.0`
+`git`
 
 ```
 guacamole
@@ -42,6 +43,8 @@ guacamole
 ## Usage
 
 ```
+sudo systemctl enable docker
+sudo systemctl start docker 
 sudo docker volume create --name=db
 git https://github.com/tankmek/guacamole-docker-compose.git
 cd docker-compose-guacamole
