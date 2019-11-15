@@ -52,8 +52,8 @@ services:
     hostname: gproxy
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
-      - "./nginx/sites:/etc/nginx/sites-enabled/"
-      - "./nginx/ssl:/etc/nginx/ssl"
+      - "./sites:/etc/nginx/sites-enabled/"
+      - "./ssl:/etc/nginx/ssl"
     container_name: gproxy
     ports:
       - "443:443"
