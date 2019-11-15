@@ -7,7 +7,7 @@ I have an upstream WAF and Reverse Proxy that uses LE Certificates. That proxy c
 ## Prerequisites
 
 `docker ce`  
-`docker-compose >= 1.23.0`
+`docker-compose >= 1.23.0`  
 `git`
 
 ```
