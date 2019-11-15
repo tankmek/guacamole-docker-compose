@@ -46,7 +46,7 @@ guacamole
 sudo systemctl enable docker
 sudo systemctl start docker 
 sudo docker volume create --name=db
-git https://github.com/tankmek/guacamole-docker-compose.git
+git clone https://github.com/tankmek/guacamole-docker-compose.git
 cd docker-compose-guacamole
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx/ssl/nginx-prv.key -out nginx/ssl/nginx-pub.crt
 openssl dhparam -out nginx/ssl/dhparam.pem 4096
