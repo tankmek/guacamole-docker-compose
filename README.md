@@ -47,9 +47,9 @@ sudo systemctl enable docker
 sudo systemctl start docker 
 sudo docker volume create --name=db
 git clone https://github.com/tankmek/guacamole-docker-compose.git
-cd docker-compose-guacamole
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx/ssl/nginx-prv.key -out nginx/ssl/nginx-pub.crt
-openssl dhparam -out nginx/ssl/dhparam.pem 4096
+cd docker-compose-guacamole/guacamole
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl/nginx-prv.key -out ssl/nginx-pub.crt
+openssl dhparam -out ssl/dhparam.pem 4096
 sudo docker run --rm guacamole/guacamole:1.0.0 /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 sudo docker-compose -p guacamole up -d
 docker cp initdb.sql db:/tmp
