@@ -7,7 +7,7 @@ services:
 # Configure MariaDB with persistent storage
 # Need to init the db
   database:
-    image: mariadb:10.0
+    image: mariadb:10.5
     hostname: db
     restart: always
     environment:
