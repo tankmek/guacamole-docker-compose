@@ -48,7 +48,7 @@ services:
 
 # Web Proxy
   gproxy:
-    image: nginx:1.20.1
+    image: nginx:1.20.2
     hostname: gproxy
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
