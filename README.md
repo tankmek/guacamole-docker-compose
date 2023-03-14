@@ -7,7 +7,9 @@ I have an upstream WAF and Reverse Proxy that uses LE Certificates. That proxy c
 
 ## Tested On
 `CentOS 7`  
-`CentOS Stream 8`
+`CentOS Stream 8`  
+`Rocky Linux 9`  
+`AlmaLinux (Lime Lynx)`  
 
 ## Prerequisites
 
