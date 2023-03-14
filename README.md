@@ -57,7 +57,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ssl/nginx-priv.key -
 openssl dhparam -out ssl/dhparam.pem 4096
 sudo docker run --rm guacamole/guacamole:1.5.0 /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 sudo setenforce 0
-sudo docker-compose -p guacamole up -d
+sudo docker-compose -p guacamole up -d || sudo docker compose -p guacamole up -d
 sudo docker cp initdb.sql db:/tmp
 sudo docker exec -it db bash
 mysql -u root -p
