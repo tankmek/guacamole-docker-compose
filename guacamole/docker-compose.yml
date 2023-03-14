@@ -7,7 +7,7 @@ services:
 # Configure MariaDB with persistent storage
 # Need to init the db
   database:
-    image: mariadb:10.5.13
+    image: mariadb:10.11.2
     hostname: db
     restart: always
     environment:
@@ -48,7 +48,7 @@ services:
 
 # Web Proxy
   gproxy:
-    image: nginx:1.20.2
+    image: nginx:1.23.3
     hostname: gproxy
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
