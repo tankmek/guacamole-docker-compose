@@ -24,7 +24,7 @@ services:
  
 # Configure proxy daemon
   guacd:
-    image: guacamole/guacd:1.5.3
+    image: guacamole/guacd:1.5.5
     container_name: guacd
     restart: always
  
