@@ -30,7 +30,7 @@ services:
  
 # Configure and link Guacamole to db and proxy
   guacamole:
-    image: guacamole/guacamole:1.5.3
+    image: guacamole/guacamole:1.5.5
     container_name: guacamole
     restart: always
     depends_on:
